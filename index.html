@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Northbrand Collective</title>
-<meta name="description" content="Northbrand Collective: small, useful web projects from Abilene, Texas.">
+<meta name="description" content="Northbrand Collective: small, useful web projects, designed and kept up with care.">
 <style>
   /* ============================================================
      NORTHBRAND COLLECTIVE HUB
@@ -61,20 +61,12 @@
     max-width:720px;
     position:relative;
   }
-  .mark{
-    font-size:13px;
-    letter-spacing:4px;
-    text-transform:uppercase;
-    color:var(--accent);
-    margin:0 0 14px;
-    animation:rise .7s ease both;
-  }
   h1{
     font-size:44px;
     font-weight:normal;
     margin:0 0 12px;
     line-height:1.15;
-    animation:rise .7s ease .08s both;
+    animation:rise .7s ease .08s backwards;
   }
   /* Gold rule under the title: grows in once, then a slow light
      sweep crosses it every few seconds. */
@@ -100,36 +92,26 @@
     color:var(--muted);
     margin:0;
     line-height:1.5;
-    animation:rise .7s ease .18s both;
-  }
-  /* Live line: gold dot pulses; the script at the bottom of the page
-     fills in the Abilene date and time (24-hour) and ticks it. */
-  .live{
-    margin:16px 0 0;
-    font-size:14px;
-    letter-spacing:1.5px;
-    text-transform:uppercase;
-    color:var(--muted);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:9px;
-    animation:rise .7s ease .28s both;
-  }
-  .live .dot{
-    width:8px;
-    height:8px;
-    border-radius:50%;
-    background:var(--accent);
-    animation:pulse 2.2s ease-in-out infinite;
-  }
-  @keyframes pulse{
-    0%,100%{box-shadow:0 0 0 0 rgba(201,162,39,.45)}
-    55%{box-shadow:0 0 0 7px rgba(201,162,39,0)}
+    animation:rise .7s ease .18s backwards;
   }
   @keyframes rise{
     from{opacity:0; transform:translateY(14px)}
     to{opacity:1; transform:translateY(0)}
+  }
+  /* Card life: a rise with a small settle on arrival, a soft gold
+     glow that breathes once the card has landed, and a slow sheen
+     sweep across the card face every few seconds. */
+  @keyframes cardIn{
+    from{opacity:0; transform:translateY(24px) scale(.965)}
+    to{opacity:1; transform:translateY(0) scale(1)}
+  }
+  @keyframes cardGlow{
+    from{box-shadow:0 0 0 rgba(201,162,39,0)}
+    to{box-shadow:0 0 24px rgba(201,162,39,.12)}
+  }
+  @keyframes sheenSlide{
+    0%{background-position:160% 0, 0 0}
+    45%,100%{background-position:-60% 0, 0 0}
   }
 
   main{
@@ -145,14 +127,14 @@
     display:block;
     position:relative;
     overflow:hidden;
-    background:var(--card);
+    background:linear-gradient(115deg, rgba(201,162,39,0) 35%, rgba(201,162,39,.07) 50%, rgba(201,162,39,0) 65%) 0 0 / 250% 100% no-repeat, var(--card);
     border:1px solid var(--card-line);
     border-radius:14px;
     padding:26px 24px;
     text-decoration:none;
     color:var(--ink);
-    animation:rise .7s ease both;
-    transition:transform .35s ease, border-color .35s ease, box-shadow .35s ease;
+    animation:cardIn .85s cubic-bezier(.22,.9,.28,1.12) backwards, cardGlow 7s ease-in-out infinite alternate, sheenSlide 9s ease-in-out infinite;
+    transition:transform .18s ease-out, border-color .35s ease, filter .35s ease;
   }
   /* Cards arrive one after another. Add a delay line here if an
      eighth card ever joins the grid. */
@@ -183,10 +165,14 @@
     transform:translateX(-8px);
     transition:opacity .35s ease, transform .35s ease;
   }
-  .card:hover, .card:focus-visible{
+  .card:hover{
+    transform:perspective(700px) rotateX(var(--ry,0deg)) rotateY(var(--rx,0deg)) translateY(-6px) scale(1.015);
+    border-color:var(--accent);
+    filter:drop-shadow(0 16px 22px rgba(0,0,0,.4));
+  }
+  .card:focus-visible{
     transform:translateY(-5px);
     border-color:var(--accent);
-    box-shadow:0 14px 30px rgba(0,0,0,.35);
   }
   .card:hover::before, .card:focus-visible::before{opacity:1}
   .card:hover::after, .card:focus-visible::after{opacity:1; transform:translateX(0)}
@@ -196,7 +182,12 @@
     font-size:22px;
     font-weight:normal;
     margin:0 0 8px;
+    display:inline-block;
+    padding-bottom:3px;
+    background:linear-gradient(var(--accent), var(--accent)) left bottom / 0% 2px no-repeat;
+    transition:background-size .4s ease;
   }
+  .card:hover h2, .card:focus-visible h2{background-size:100% 2px}
   .card p{
     margin:0 0 14px;
     color:var(--muted);
@@ -207,7 +198,9 @@
     font-size:14px;
     color:var(--accent);
     letter-spacing:.4px;
+    transition:letter-spacing .3s ease;
   }
+  .card:hover .url{letter-spacing:1.2px}
   footer{
     margin-top:auto;
     padding:28px 24px 36px;
@@ -234,11 +227,9 @@
 <body>
 
 <header>
-  <p class="mark">Est. Abilene, Texas</p>
   <h1>Northbrand Collective</h1>
   <div class="rule"></div>
-  <p class="tagline">Small, useful web projects, designed and kept up in Abilene, Texas. Pick a door:</p>
-  <p class="live"><span class="dot"></span><span id="clock">Abilene, Texas</span></p>
+  <p class="tagline">Small, useful web projects, designed and kept up with care. Pick a door:</p>
 </header>
 
 <main>
@@ -283,35 +274,27 @@
 <footer>&copy; 2026 Northbrand Collective &middot; <a href="https://northbrand.net" style="color:var(--accent);text-decoration:none">northbrand.net</a></footer>
 
 <script>
-  // Live Abilene clock in the header line, 24-hour format, ticking
-  // every second. Falls back to the plain "Abilene, Texas" text if
-  // the browser will not format dates.
-  (function () {
-    var el = document.getElementById('clock');
-    if (!el) return;
-    var dateFmt = new Intl.DateTimeFormat('en-US', {
-      timeZone: 'America/Chicago', weekday: 'long', month: 'short', day: 'numeric'
+  // Card life: a warm highlight follows the pointer across each card,
+  // and the card tilts gently toward it. The CSS reads --mx and --my
+  // for the highlight and --rx and --ry for the tilt. Skipped entirely
+  // for visitors who prefer reduced motion.
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.card').forEach(function (card) {
+      card.addEventListener('pointermove', function (e) {
+        var r = card.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width;
+        var py = (e.clientY - r.top) / r.height;
+        card.style.setProperty('--mx', (px * 100) + '%');
+        card.style.setProperty('--my', (py * 100) + '%');
+        card.style.setProperty('--rx', ((px - 0.5) * 7).toFixed(2) + 'deg');
+        card.style.setProperty('--ry', ((0.5 - py) * 7).toFixed(2) + 'deg');
+      });
+      card.addEventListener('pointerleave', function () {
+        card.style.setProperty('--rx', '0deg');
+        card.style.setProperty('--ry', '0deg');
+      });
     });
-    var timeFmt = new Intl.DateTimeFormat('en-GB', {
-      timeZone: 'America/Chicago', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
-    });
-    function tick() {
-      var now = new Date();
-      el.textContent = 'Abilene, Texas \u00B7 ' + dateFmt.format(now) + ' \u00B7 ' + timeFmt.format(now) + ' CT';
-    }
-    tick();
-    setInterval(tick, 1000);
-  })();
-
-  // Pointer-follow highlight on the cards: feeds the --mx and --my
-  // variables the card ::before gradient reads.
-  document.querySelectorAll('.card').forEach(function (card) {
-    card.addEventListener('pointermove', function (e) {
-      var r = card.getBoundingClientRect();
-      card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
-      card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
-    });
-  });
+  }
 </script>
 
 </body>
