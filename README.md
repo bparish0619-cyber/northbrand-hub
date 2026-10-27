@@ -21,7 +21,7 @@ Each site has its own repository; this repo holds only the hub page itself.
 
 The hub follows the **Northbrand design DNA** (see `DESIGN.md` in this repo, which governs every northbrand.net page): warm ink `#14161c`, Northbrand Gold `#c9a227`, serif display type, hairline card borders, and a calm, printed feel.
 
-The hub is the one page allowed gentle motion: the cards rise in one after another, a gold rule shimmers under the title, a live Abilene clock ticks in the header (24-hour format), cards lift on hover with a warm highlight that follows the pointer, and the background glow breathes slowly. All of it settles for visitors who prefer reduced motion. The topic pages stay still.
+The hub is the one page allowed gentle motion: the cards rise and settle in one after another with a breathing gold glow and a slow sheen sweep, a gold rule shimmers under the title, cards lift and tilt on hover with a warm highlight that follows the pointer, and the background glow breathes slowly. All of it settles for visitors who prefer reduced motion. The topic pages stay still.
 
 ## Editing
 
@@ -30,7 +30,7 @@ Everything lives in the single file `index.html`. There is no build step.
 - **Add or change a site:** copy a card block in the `<main>` section (each card is one `<a class="card">` block) and edit its link, title, one-line description, and address.
 - **Change colors:** edit the variables in `:root` at the top of the `<style>` block.
 - **Change the wording:** the tagline and footer are plain HTML in the `<header>` and `<footer>` sections.
-- **The clock:** a small script at the bottom of the page formats the America/Chicago date and time. The card highlight script sits right below it.
+- **The motion:** a small script at the bottom of the page drives the card highlight and tilt; everything else is CSS in the `<style>` block.
 
 ## Deployment
 
