@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Northbrand Collective</title>
+<meta name="description" content="Northbrand Collective: small, useful web projects from Abilene, Texas.">
+<style>
+  /* ============================================================
+     NORTHBRAND COLLECTIVE HUB
+     Single-file landing page for northbrand.net.
+     TO EDIT THE SITE LIST: change the cards in the <main> section
+     below (each card is one <a class="card"> block).
+     TO EDIT COLORS: change the variables in :root right here.
+     DESIGN DNA: DESIGN.md in this folder governs every northbrand.net
+     page. The hub is the one page allowed gentle motion (entrance,
+     ambient glow, hover life); the topic pages stay still.
+     BACKUP: this page lives in the GitHub repo northbrand-hub.
+     ============================================================ */
+  :root{
+    --bg:#14161c;
+    --card:#1d2029;
+    --card-line:#2c303e;
+    --ink:#f2efe9;
+    --muted:#a7aabc;
+    --accent:#c9a227;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:Georgia,'Times New Roman',serif;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    overflow-x:hidden;
+  }
+
+  /* Ambient glow: a slow-breathing gold light behind the page.
+     Pure decoration; it sits behind everything and never moves content. */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+      radial-gradient(620px circle at 50% -80px, rgba(201,162,39,.16), transparent 65%),
+      radial-gradient(900px circle at 85% 110%, rgba(201,162,39,.06), transparent 60%);
+    pointer-events:none;
+    animation:breathe 14s ease-in-out infinite alternate;
+  }
+  @keyframes breathe{
+    from{opacity:.65}
+    to{opacity:1}
+  }
+
+  header{
+    text-align:center;
+    padding:72px 24px 8px;
+    max-width:720px;
+    position:relative;
+  }
+  .mark{
+    font-size:13px;
+    letter-spacing:4px;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin:0 0 14px;
+    animation:rise .7s ease both;
+  }
+  h1{
+    font-size:44px;
+    font-weight:normal;
+    margin:0 0 12px;
+    line-height:1.15;
+    animation:rise .7s ease .08s both;
+  }
+  /* Gold rule under the title: grows in once, then a slow light
+     sweep crosses it every few seconds. */
+  .rule{
+    width:120px;
+    height:2px;
+    margin:18px auto 20px;
+    background:linear-gradient(90deg, transparent, var(--accent), transparent);
+    background-size:200% 100%;
+    transform-origin:center;
+    animation:grow .9s ease .2s both, shimmer 5.5s linear 1.2s infinite;
+  }
+  @keyframes grow{
+    from{transform:scaleX(0); opacity:0}
+    to{transform:scaleX(1); opacity:1}
+  }
+  @keyframes shimmer{
+    from{background-position:120% 0}
+    to{background-position:-80% 0}
+  }
+  .tagline{
+    font-size:18px;
+    color:var(--muted);
+    margin:0;
+    line-height:1.5;
+    animation:rise .7s ease .18s both;
+  }
+  /* Live line: gold dot pulses; the script at the bottom of the page
+     fills in the Abilene date and time (24-hour) and ticks it. */
+  .live{
+    margin:16px 0 0;
+    font-size:14px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--muted);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:9px;
+    animation:rise .7s ease .28s both;
+  }
+  .live .dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--accent);
+    animation:pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{box-shadow:0 0 0 0 rgba(201,162,39,.45)}
+    55%{box-shadow:0 0 0 7px rgba(201,162,39,0)}
+  }
+  @keyframes rise{
+    from{opacity:0; transform:translateY(14px)}
+    to{opacity:1; transform:translateY(0)}
+  }
+
+  main{
+    width:100%;
+    max-width:880px;
+    padding:40px 24px 24px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    position:relative;
+  }
+  .card{
+    display:block;
+    position:relative;
+    overflow:hidden;
+    background:var(--card);
+    border:1px solid var(--card-line);
+    border-radius:14px;
+    padding:26px 24px;
+    text-decoration:none;
+    color:var(--ink);
+    animation:rise .7s ease both;
+    transition:transform .35s ease, border-color .35s ease, box-shadow .35s ease;
+  }
+  /* Cards arrive one after another. Add a delay line here if an
+     eighth card ever joins the grid. */
+  main .card:nth-child(1){animation-delay:.30s}
+  main .card:nth-child(2){animation-delay:.40s}
+  main .card:nth-child(3){animation-delay:.50s}
+  main .card:nth-child(4){animation-delay:.60s}
+  main .card:nth-child(5){animation-delay:.70s}
+  main .card:nth-child(6){animation-delay:.80s}
+  /* Warm highlight that follows the visitor's pointer across a card.
+     The script sets --mx and --my; without a pointer it stays hidden. */
+  .card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%), rgba(201,162,39,.15), transparent 65%);
+    opacity:0;
+    transition:opacity .35s ease;
+  }
+  .card::after{
+    content:"\2192";
+    position:absolute;
+    top:22px;
+    right:22px;
+    color:var(--accent);
+    font-size:20px;
+    opacity:0;
+    transform:translateX(-8px);
+    transition:opacity .35s ease, transform .35s ease;
+  }
+  .card:hover, .card:focus-visible{
+    transform:translateY(-5px);
+    border-color:var(--accent);
+    box-shadow:0 14px 30px rgba(0,0,0,.35);
+  }
+  .card:hover::before, .card:focus-visible::before{opacity:1}
+  .card:hover::after, .card:focus-visible::after{opacity:1; transform:translateX(0)}
+  .card:focus-visible{outline:3px solid var(--accent); outline-offset:3px}
+  .card > *{position:relative; z-index:1}
+  .card h2{
+    font-size:22px;
+    font-weight:normal;
+    margin:0 0 8px;
+  }
+  .card p{
+    margin:0 0 14px;
+    color:var(--muted);
+    font-size:16px;
+    line-height:1.5;
+  }
+  .card .url{
+    font-size:14px;
+    color:var(--accent);
+    letter-spacing:.4px;
+  }
+  footer{
+    margin-top:auto;
+    padding:28px 24px 36px;
+    color:var(--muted);
+    font-size:14px;
+    text-align:center;
+    position:relative;
+  }
+  @media (max-width:640px){
+    main{grid-template-columns:1fr}
+    h1{font-size:34px}
+    header{padding-top:52px}
+  }
+  /* Respect visitors who ask for less motion: everything settles. */
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="mark">Est. Abilene, Texas</p>
+  <h1>Northbrand Collective</h1>
+  <div class="rule"></div>
+  <p class="tagline">Small, useful web projects, designed and kept up in Abilene, Texas. Pick a door:</p>
+  <p class="live"><span class="dot"></span><span id="clock">Abilene, Texas</span></p>
+</header>
+
+<main>
+  <!-- SITE CARDS: one block per site. Copy a block to add a site. -->
+  <a class="card" href="https://cfbsaga.northbrand.net">
+    <h2>CFB Saga</h2>
+    <p>Jeff Sagarin's college football ratings for all 266 teams, with a matchup predictor.</p>
+    <span class="url">cfbsaga.northbrand.net</span>
+  </a>
+
+  <a class="card" href="https://colorguard.northbrand.net">
+    <h2>Wylie Colorguard Digest</h2>
+    <p>Schedules, deadlines, and need-to-know updates for the Wylie Pure Gold colorguard.</p>
+    <span class="url">colorguard.northbrand.net</span>
+  </a>
+
+  <a class="card" href="https://weekend.northbrand.net">
+    <h2>Abilene Weekend</h2>
+    <p>The week's events, shows, and pop-ups around Abilene, refreshed every Wednesday.</p>
+    <span class="url">weekend.northbrand.net</span>
+  </a>
+
+  <a class="card" href="https://weather.northbrand.net">
+    <h2>Northbrand Weather</h2>
+    <p>A plain, quick weather board for Abilene and the surrounding country.</p>
+    <span class="url">weather.northbrand.net</span>
+  </a>
+
+  <a class="card" href="https://va.northbrand.net">
+    <h2>VA Health Care Quick Guide</h2>
+    <p>Priority groups, copays, urgent vs. emergency care, and the contacts that matter, in one page.</p>
+    <span class="url">va.northbrand.net</span>
+  </a>
+
+  <a class="card" href="https://retirement.northbrand.net">
+    <h2>Retirement Curator</h2>
+    <p>Retirement outcome simulations based on VOO and VTI, with 2026 tax-aware analysis.</p>
+    <span class="url">retirement.northbrand.net</span>
+  </a>
+</main>
+
+<footer>&copy; 2026 Northbrand Collective &middot; <a href="https://northbrand.net" style="color:var(--accent);text-decoration:none">northbrand.net</a></footer>
+
+<script>
+  // Live Abilene clock in the header line, 24-hour format, ticking
+  // every second. Falls back to the plain "Abilene, Texas" text if
+  // the browser will not format dates.
+  (function () {
+    var el = document.getElementById('clock');
+    if (!el) return;
+    var dateFmt = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Chicago', weekday: 'long', month: 'short', day: 'numeric'
+    });
+    var timeFmt = new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'America/Chicago', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+    });
+    function tick() {
+      var now = new Date();
+      el.textContent = 'Abilene, Texas \u00B7 ' + dateFmt.format(now) + ' \u00B7 ' + timeFmt.format(now) + ' CT';
+    }
+    tick();
+    setInterval(tick, 1000);
+  })();
+
+  // Pointer-follow highlight on the cards: feeds the --mx and --my
+  // variables the card ::before gradient reads.
+  document.querySelectorAll('.card').forEach(function (card) {
+    card.addEventListener('pointermove', function (e) {
+      var r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+      card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+    });
+  });
+</script>
+
+</body>
+</html>
