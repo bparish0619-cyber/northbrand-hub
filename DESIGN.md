@@ -11,7 +11,7 @@ Key characteristics:
 - Northbrand Gold is the one accent shared by every page
 - Cards with hairline borders and at most a whisper of shadow
 - Low density and scannable: one clear fact at a time, short phrases over prose
-- No ads, no popups, no autoplay, no motion beyond a subtle hover
+- No ads, no popups, no autoplay. Motion: the topic pages stay still beyond a subtle hover; the hub is the exception (set 2026-10-27 at Brandon's request) and may use gentle entrance, ambient, and hover motion, always with a prefers-reduced-motion fallback
 
 ## 2. Color Palette & Roles
 
