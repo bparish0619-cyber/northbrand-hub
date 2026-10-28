@@ -11,6 +11,14 @@
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<!-- Add to Home Screen plumbing: the manifest names the hub and its icons,
+     theme-color tints the browser chrome to Northbrand Ink, and the Apple
+     tags let iOS run the saved icon full-screen with the right name. -->
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#14161c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Northbrand">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <style>
   /* ============================================================
      NORTHBRAND COLLECTIVE HUB
@@ -215,6 +223,41 @@
     text-align:center;
     position:relative;
   }
+  /* Add to Home Screen: the last stop before the footer lockup.
+     Gold fill with ink text, the DNA button style for dark pages. */
+  .install{
+    padding:10px 24px 2px;
+    text-align:center;
+    position:relative;
+  }
+  .install-btn{
+    font:inherit;
+    font-size:15px;
+    letter-spacing:.6px;
+    min-height:48px;
+    padding:12px 26px;
+    border:1px solid var(--accent);
+    border-radius:999px;
+    background:var(--accent);
+    color:#14161c;
+    cursor:pointer;
+    transition:transform .3s ease, box-shadow .3s ease;
+  }
+  .install-btn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,.35)}
+  .install-help{
+    max-width:520px;
+    margin:16px auto 0;
+    padding:16px 20px;
+    background:var(--card);
+    border:1px solid var(--card-line);
+    border-radius:16px;
+    color:var(--ink);
+    font-size:15px;
+    line-height:1.55;
+    text-align:left;
+  }
+  .install-help p{margin:0}
+  [hidden]{display:none !important}
   @media (max-width:640px){
     main{grid-template-columns:1fr}
     h1{font-size:34px}
@@ -277,6 +320,17 @@
   </a>
 </main>
 
+<!-- Add to Home Screen: Android and Chrome get the browser's own install
+     prompt from the script below. iOS offers no prompt, so the button opens
+     short Share menu steps instead. The block stays hidden once installed. -->
+<div class="install" id="install" hidden>
+  <button class="install-btn" id="install-btn" type="button">Add Northbrand to your home screen</button>
+  <div class="install-help" id="install-help" hidden>
+    <p id="install-help-ios" hidden>On your iPhone or iPad: tap the Share icon in Safari, scroll down, and choose <strong>Add to Home Screen</strong>. Northbrand lands on your home screen with its own icon, one tap from everything.</p>
+    <p id="install-help-other" hidden>In your browser menu, choose <strong>Install app</strong> or <strong>Add to Home screen</strong>. Northbrand lands on your home screen with its own icon, one tap from everything.</p>
+  </div>
+</div>
+
 <footer>&copy; 2026 Northbrand Collective &middot; <a href="https://northbrand.net" style="color:var(--accent);text-decoration:none">northbrand.net</a></footer>
 
 <script>
@@ -301,6 +355,48 @@
       });
     });
   }
+</script>
+
+<script>
+  // Add to Home Screen.
+  // Android and Chrome: the browser offers its own install prompt, captured
+  // here and fired by the button. iOS has no prompt, so the button shows the
+  // Share menu steps instead. Once the hub is installed (running
+  // standalone), the whole block stays hidden.
+  (function () {
+    var wrap = document.getElementById('install');
+    var btn = document.getElementById('install-btn');
+    var help = document.getElementById('install-help');
+    var standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    if (standalone) return;
+    wrap.hidden = false;
+
+    var deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
+
+    var isIOS = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+
+    btn.addEventListener('click', function () {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(function () { deferredPrompt = null; });
+        return;
+      }
+      document.getElementById(isIOS ? 'install-help-ios' : 'install-help-other').hidden = false;
+      help.hidden = false;
+    });
+
+    window.addEventListener('appinstalled', function () { wrap.hidden = true; });
+
+    // The service worker exists only so Chrome will offer the prompt.
+    // It caches nothing (see sw.js), so visits always load the live page.
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(function () {});
+    }
+  })();
 </script>
 
 </body>
