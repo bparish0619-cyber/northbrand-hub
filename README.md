@@ -23,9 +23,15 @@ The hub follows the **Northbrand design DNA** (see `DESIGN.md` in this repo, whi
 
 The hub is the one page allowed gentle motion: the cards rise and settle in one after another with a breathing gold glow and a slow sheen sweep, a gold rule shimmers under the title, cards lift and tilt on hover with a warm highlight that follows the pointer, and the background glow breathes slowly. All of it settles for visitors who prefer reduced motion. The topic pages stay still.
 
+## Favicon and home screen
+
+The hub carries its own favicon: a gold serif "N" on Northbrand Ink (`favicon.svg`, with `favicon-32.png`, `favicon.ico`, and `apple-touch-icon.png` behind it, and `icon-512.png` as the master art).
+
+It also offers an **Add to Home Screen** button, the last block above the footer. Android and Chrome fire the browser's native install prompt; iOS, which has no prompt, opens a small in-page card with the Share menu steps. The button hides itself once the hub is installed. The plumbing lives beside the page: `manifest.webmanifest` (with `icon-192.png` and the full-bleed `icon-maskable-512.png`) and `sw.js`, a service worker that deliberately caches nothing, present only so Chrome will offer the prompt. Both are recorded in `DESIGN.md`.
+
 ## Editing
 
-Everything lives in the single file `index.html`. There is no build step.
+The page itself lives in the single file `index.html`. There is no build step.
 
 - **Add or change a site:** copy a card block in the `<main>` section (each card is one `<a class="card">` block) and edit its link, title, one-line description, and address.
 - **Change colors:** edit the variables in `:root` at the top of the `<style>` block.
@@ -46,12 +52,14 @@ Publish flow:
 1. Copy the master over the staging copy.
 2. Deploy with the Cloudflare helper: `python3 ~/workspace/custom-connectors/custom.cloudflare/bin/cloudflare_deploy.py northbrand ~/workspace/cloudflare-sites/northbrand`
 3. Verify https://northbrand.net answers 200 and shows the change.
-4. Commit the same `index.html` to this repo so the archive matches the live page.
+4. Commit every changed file (page, icons, manifest, service worker) to this repo so the archive matches the live page.
 
 This repository is the backup and archive of record for the hub page, the same pattern the other Northbrand sites use.
 
 ## Files
 
-- `index.html`: the hub page (the only file the site serves)
+- `index.html`: the hub page
 - `DESIGN.md`: the Northbrand design DNA, shared by all northbrand.net pages
 - `README.md`: this file
+- `favicon.svg`, `favicon-32.png`, `favicon.ico`, `apple-touch-icon.png`, `icon-512.png`: the favicon set (gold serif N on ink)
+- `manifest.webmanifest`, `sw.js`, `icon-192.png`, `icon-maskable-512.png`: the Add to Home Screen plumbing
