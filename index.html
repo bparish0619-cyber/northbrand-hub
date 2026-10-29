@@ -137,6 +137,22 @@
     gap:18px;
     position:relative;
   }
+  /* Group labels: small gold eyebrows splitting the doors into
+     everyday boards and reference and tools. A label spans the full
+     grid row; the first one sits flush at the top of the grid. */
+  .group-label{
+    grid-column:1 / -1;
+    margin:28px 0 2px;
+    font-size:14px;
+    font-weight:normal;
+    letter-spacing:2.5px;
+    text-transform:uppercase;
+    color:var(--accent);
+    animation:rise .7s ease backwards;
+  }
+  main > .group-label:first-child{margin-top:0}
+  main > .group-label:nth-of-type(1){animation-delay:.22s}
+  main > .group-label:nth-of-type(2){animation-delay:.52s}
   .card{
     display:block;
     position:relative;
@@ -150,15 +166,16 @@
     animation:cardIn .85s cubic-bezier(.22,.9,.28,1.12) backwards, cardGlow 7s ease-in-out infinite alternate, sheenSlide 9s ease-in-out infinite;
     transition:transform .18s ease-out, border-color .35s ease, filter .35s ease;
   }
-  /* Cards arrive one after another. Add a delay line here if a
-     ninth card ever joins the grid. */
-  main .card:nth-child(1){animation-delay:.30s}
-  main .card:nth-child(2){animation-delay:.40s}
-  main .card:nth-child(3){animation-delay:.50s}
-  main .card:nth-child(4){animation-delay:.60s}
-  main .card:nth-child(5){animation-delay:.70s}
-  main .card:nth-child(6){animation-delay:.80s}
-  main .card:nth-child(7){animation-delay:.90s}
+  /* Cards arrive one after another, group by group. Delays count
+     cards only (nth-of-type), so the group labels do not offset them.
+     Add a delay line here when a new card joins the grid. */
+  main .card:nth-of-type(1){animation-delay:.30s}
+  main .card:nth-of-type(2){animation-delay:.40s}
+  main .card:nth-of-type(3){animation-delay:.50s}
+  main .card:nth-of-type(4){animation-delay:.60s}
+  main .card:nth-of-type(5){animation-delay:.70s}
+  main .card:nth-of-type(6){animation-delay:.80s}
+  main .card:nth-of-type(7){animation-delay:.90s}
   /* Warm highlight that follows the visitor's pointer across a card.
      The script sets --mx and --my; without a pointer it stays hidden. */
   .card::before{
@@ -283,17 +300,16 @@
 </header>
 
 <main>
-  <!-- SITE CARDS: one block per site. Copy a block to add a site. -->
-  <a class="card" href="https://cfbsaga.northbrand.net">
-    <h2>CFB Saga</h2>
-    <p>Jeff Sagarin's college football ratings for all 266 teams, with a matchup predictor.</p>
-    <span class="url">cfbsaga.northbrand.net</span>
-  </a>
+  <!-- SITE CARDS, grouped: everyday boards first, then reference and
+       tools. One card block per site; copy a block to add a site,
+       and add its entrance delay in the CSS above. -->
 
-  <a class="card" href="https://colorguard.northbrand.net">
-    <h2>Wylie Colorguard Digest</h2>
-    <p>Schedules, deadlines, and need-to-know updates for the Wylie Pure Gold colorguard.</p>
-    <span class="url">colorguard.northbrand.net</span>
+  <h2 class="group-label">Everyday boards</h2>
+
+  <a class="card" href="https://weather.northbrand.net">
+    <h2>Northbrand Weather</h2>
+    <p>A plain, quick weather board for Abilene and the surrounding country.</p>
+    <span class="url">weather.northbrand.net</span>
   </a>
 
   <a class="card" href="https://weekend.northbrand.net">
@@ -302,16 +318,24 @@
     <span class="url">weekend.northbrand.net</span>
   </a>
 
-  <a class="card" href="https://weather.northbrand.net">
-    <h2>Northbrand Weather</h2>
-    <p>A plain, quick weather board for Abilene and the surrounding country.</p>
-    <span class="url">weather.northbrand.net</span>
+  <a class="card" href="https://colorguard.northbrand.net">
+    <h2>Wylie Colorguard Digest</h2>
+    <p>Schedules, deadlines, and need-to-know updates for the Wylie Pure Gold colorguard.</p>
+    <span class="url">colorguard.northbrand.net</span>
   </a>
+
+  <h2 class="group-label">Reference and tools</h2>
 
   <a class="card" href="https://va.northbrand.net">
     <h2>VA Health Care Quick Guide</h2>
     <p>Priority groups, copays, urgent vs. emergency care, and the contacts that matter, in one page.</p>
     <span class="url">va.northbrand.net</span>
+  </a>
+
+  <a class="card" href="https://cfbsaga.northbrand.net">
+    <h2>CFB Saga</h2>
+    <p>Jeff Sagarin's college football ratings for all 266 teams, with a matchup predictor.</p>
+    <span class="url">cfbsaga.northbrand.net</span>
   </a>
 
   <a class="card" href="https://retirement.northbrand.net">
