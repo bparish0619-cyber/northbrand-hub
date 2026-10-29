@@ -69,6 +69,21 @@
     to{opacity:1}
   }
 
+  /* Gold particle field: the canvas the three.js script at the bottom
+     of the page renders into. Fixed behind the content, never receives
+     clicks, and simply absent when the script decides not to run.
+     The content wrappers already sit at position:relative; z-index 1
+     lifts them above the canvas (z-index 0). */
+  #goldfield{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:0;
+    pointer-events:none;
+  }
+  header, main, .install, footer{position:relative; z-index:1}
+
   header{
     text-align:center;
     padding:72px 24px 8px;
@@ -293,6 +308,8 @@
 </head>
 <body>
 
+<canvas id="goldfield" aria-hidden="true"></canvas>
+
 <header>
   <h1>Northbrand Collective</h1>
   <div class="rule"></div>
@@ -428,6 +445,130 @@
       navigator.serviceWorker.register('/sw.js').catch(function () {});
     }
   })();
+</script>
+
+<script type="module">
+  // Gold particle field (three.js).
+  // A fixed WebGL canvas behind the page, filled with slow drifting
+  // gold dust. Pure decoration with three exits, any of which leaves
+  // the page exactly as it was without it:
+  //   1. visitors who prefer reduced motion never start it,
+  //   2. browsers without WebGL never start it,
+  //   3. if the library cannot load (offline, CDN trouble), the
+  //      canvas is removed and nothing else changes.
+  // TO TUNE IT: the values in SETTINGS below are the whole field:
+  // count, color, size, opacity, drift speed, and parallax depth.
+  const SETTINGS = {
+    countDesktop: 420,   // particles on wide screens
+    countMobile: 220,    // particles under 640px wide
+    color: 0xc9a227,     // Northbrand Gold
+    size: 0.09,          // particle size in world units
+    opacity: 0.55,       // a whisper, not a snowstorm
+    driftSeconds: 240,   // seconds per full slow rotation
+    parallaxX: 0.6,      // how far the camera leans with the pointer
+    parallaxY: 0.35
+  };
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const canvas = document.getElementById('goldfield');
+
+  if (!reduceMotion && canvas) {
+    try {
+      const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js');
+      init(THREE);
+    } catch (err) {
+      canvas.remove();
+    }
+  } else if (canvas) {
+    canvas.remove();
+  }
+
+  function init(THREE) {
+    // Renderer: alpha on, so the page's own gold glow shows through;
+    // antialias off because the particles are soft sprites already.
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false, powerPreference: 'low-power' });
+    } catch (err) {
+      canvas.remove();
+      return;
+    }
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
+    camera.position.z = 8;
+
+    // Soft round sprite: a radial gradient drawn once on a tiny
+    // canvas, so each particle is a blurred dot instead of a square.
+    const sprite = (() => {
+      const c = document.createElement('canvas');
+      c.width = c.height = 64;
+      const ctx = c.getContext('2d');
+      const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+      g.addColorStop(0, 'rgba(255,255,255,1)');
+      g.addColorStop(0.4, 'rgba(255,255,255,.6)');
+      g.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, 64, 64);
+      return new THREE.CanvasTexture(c);
+    })();
+
+    // Particle cloud: random points in a wide, shallow box, so the
+    // field reads as depth rather than a flat wall.
+    const count = window.innerWidth < 640 ? SETTINGS.countMobile : SETTINGS.countDesktop;
+    const positions = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      positions[i * 3] = (Math.random() - 0.5) * 26;     // x spread
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 15; // y spread
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 9;  // z depth
+    }
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const material = new THREE.PointsMaterial({
+      color: SETTINGS.color,
+      size: SETTINGS.size,
+      map: sprite,
+      transparent: true,
+      opacity: SETTINGS.opacity,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      sizeAttenuation: true
+    });
+    const dust = new THREE.Points(geometry, material);
+    scene.add(dust);
+
+    // Pointer parallax: the camera leans gently toward the pointer.
+    // The small lerp factor keeps the motion calm even when the
+    // pointer jumps across the screen.
+    let targetX = 0, targetY = 0;
+    window.addEventListener('pointermove', (e) => {
+      targetX = (e.clientX / window.innerWidth - 0.5) * 2;
+      targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+    }, { passive: true });
+
+    const resize = () => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+    };
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Render loop: one slow rotation plus a barely-there bob. When
+    // the tab is hidden the frame is skipped entirely.
+    const clock = new THREE.Clock();
+    renderer.setAnimationLoop(() => {
+      if (document.hidden) return;
+      const t = clock.getElapsedTime();
+      dust.rotation.y = (t / SETTINGS.driftSeconds) * Math.PI * 2;
+      dust.position.y = Math.sin(t * 0.12) * 0.25;
+      camera.position.x += (targetX * SETTINGS.parallaxX - camera.position.x) * 0.03;
+      camera.position.y += (-targetY * SETTINGS.parallaxY - camera.position.y) * 0.03;
+      camera.lookAt(0, 0, 0);
+      renderer.render(scene, camera);
+    });
+  }
 </script>
 
 </body>
