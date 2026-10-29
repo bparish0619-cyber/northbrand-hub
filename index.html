@@ -23,277 +23,17 @@
   /* ============================================================
      NORTHBRAND COLLECTIVE HUB
      Single-file landing page for northbrand.net.
-     TO EDIT THE SITE LIST: change the cards in the <main> section
-     below (each card is one <a class="card"> block).
-     TO EDIT COLORS: change the variables in :root right here.
-     DESIGN DNA: DESIGN.md in this folder governs every northbrand.net
-     page. The hub is the one page allowed gentle motion (entrance,
-     ambient glow, hover life); the topic pages stay still.
-     BACKUP: this page lives in the GitHub repo northbrand-hub.
-     ============================================================ */
-  :root{
-    --bg:#14161c;
-    --card:#1d2029;
-    --card-line:#2c303e;
-    --ink:#f2efe9;
-    --muted:#a7aabc;
-    --accent:#c9a227;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--ink);
-    font-family:Georgia,'Times New Roman',serif;
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    overflow-x:hidden;
-  }
+     TO EDIT THE SITE LIST: change the cards in the <main>
+  <!-- SITE CARDS, grouped: everyday boards first, then reference and
+       tools. One <a class="card"> block per site; copy a block to add
+       a site, and add its entrance delay in the CSS above. -->
 
-  /* Ambient glow: a slow-breathing gold light behind the page.
-     Pure decoration; it sits behind everything and never moves content. */
-  body::before{
-    content:"";
-    position:fixed;
-    inset:0;
-    background:
-      radial-gradient(620px circle at 50% -80px, rgba(201,162,39,.16), transparent 65%),
-      radial-gradient(900px circle at 85% 110%, rgba(201,162,39,.06), transparent 60%);
-    pointer-events:none;
-    animation:breathe 14s ease-in-out infinite alternate;
-  }
-  @keyframes breathe{
-    from{opacity:.65}
-    to{opacity:1}
-  }
+  <h2 class="group-label">Everyday boards</h2>
 
-  header{
-    text-align:center;
-    padding:72px 24px 8px;
-    max-width:720px;
-    position:relative;
-  }
-  h1{
-    font-size:44px;
-    font-weight:normal;
-    margin:0 0 12px;
-    line-height:1.15;
-    animation:rise .7s ease .08s backwards;
-  }
-  /* Gold rule under the title: grows in once, then a slow light
-     sweep crosses it every few seconds. */
-  .rule{
-    width:120px;
-    height:2px;
-    margin:18px auto 20px;
-    background:linear-gradient(90deg, transparent, var(--accent), transparent);
-    background-size:200% 100%;
-    transform-origin:center;
-    animation:grow .9s ease .2s both, shimmer 5.5s linear 1.2s infinite;
-  }
-  @keyframes grow{
-    from{transform:scaleX(0); opacity:0}
-    to{transform:scaleX(1); opacity:1}
-  }
-  @keyframes shimmer{
-    from{background-position:120% 0}
-    to{background-position:-80% 0}
-  }
-  .tagline{
-    font-size:18px;
-    color:var(--muted);
-    margin:0;
-    line-height:1.5;
-    animation:rise .7s ease .18s backwards;
-  }
-  @keyframes rise{
-    from{opacity:0; transform:translateY(14px)}
-    to{opacity:1; transform:translateY(0)}
-  }
-  /* Card life: a rise with a small settle on arrival, a soft gold
-     glow that breathes once the card has landed, and a slow sheen
-     sweep across the card face every few seconds. */
-  @keyframes cardIn{
-    from{opacity:0; transform:translateY(24px) scale(.965)}
-    to{opacity:1; transform:translateY(0) scale(1)}
-  }
-  @keyframes cardGlow{
-    from{box-shadow:0 0 0 rgba(201,162,39,0)}
-    to{box-shadow:0 0 24px rgba(201,162,39,.12)}
-  }
-  @keyframes sheenSlide{
-    0%{background-position:160% 0, 0 0}
-    45%,100%{background-position:-60% 0, 0 0}
-  }
-
-  main{
-    width:100%;
-    max-width:880px;
-    padding:40px 24px 24px;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:18px;
-    position:relative;
-  }
-  .card{
-    display:block;
-    position:relative;
-    overflow:hidden;
-    background:linear-gradient(115deg, rgba(201,162,39,0) 35%, rgba(201,162,39,.07) 50%, rgba(201,162,39,0) 65%) 0 0 / 250% 100% no-repeat, var(--card);
-    border:1px solid var(--card-line);
-    border-radius:14px;
-    padding:26px 24px;
-    text-decoration:none;
-    color:var(--ink);
-    animation:cardIn .85s cubic-bezier(.22,.9,.28,1.12) backwards, cardGlow 7s ease-in-out infinite alternate, sheenSlide 9s ease-in-out infinite;
-    transition:transform .18s ease-out, border-color .35s ease, filter .35s ease;
-  }
-  /* Cards arrive one after another. Add a delay line here if a
-     ninth card ever joins the grid. */
-  main .card:nth-child(1){animation-delay:.30s}
-  main .card:nth-child(2){animation-delay:.40s}
-  main .card:nth-child(3){animation-delay:.50s}
-  main .card:nth-child(4){animation-delay:.60s}
-  main .card:nth-child(5){animation-delay:.70s}
-  main .card:nth-child(6){animation-delay:.80s}
-  main .card:nth-child(7){animation-delay:.90s}
-  /* Warm highlight that follows the visitor's pointer across a card.
-     The script sets --mx and --my; without a pointer it stays hidden. */
-  .card::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%), rgba(201,162,39,.15), transparent 65%);
-    opacity:0;
-    transition:opacity .35s ease;
-  }
-  .card::after{
-    content:"\2192";
-    position:absolute;
-    top:22px;
-    right:22px;
-    color:var(--accent);
-    font-size:20px;
-    opacity:0;
-    transform:translateX(-8px);
-    transition:opacity .35s ease, transform .35s ease;
-  }
-  .card:hover{
-    transform:perspective(700px) rotateX(var(--ry,0deg)) rotateY(var(--rx,0deg)) translateY(-6px) scale(1.015);
-    border-color:var(--accent);
-    filter:drop-shadow(0 16px 22px rgba(0,0,0,.4));
-  }
-  .card:focus-visible{
-    transform:translateY(-5px);
-    border-color:var(--accent);
-  }
-  .card:hover::before, .card:focus-visible::before{opacity:1}
-  .card:hover::after, .card:focus-visible::after{opacity:1; transform:translateX(0)}
-  .card:focus-visible{outline:3px solid var(--accent); outline-offset:3px}
-  .card > *{position:relative; z-index:1}
-  .card h2{
-    font-size:22px;
-    font-weight:normal;
-    margin:0 0 8px;
-    display:inline-block;
-    padding-bottom:3px;
-    background:linear-gradient(var(--accent), var(--accent)) left bottom / 0% 2px no-repeat;
-    transition:background-size .4s ease;
-  }
-  .card:hover h2, .card:focus-visible h2{background-size:100% 2px}
-  .card p{
-    margin:0 0 14px;
-    color:var(--muted);
-    font-size:16px;
-    line-height:1.5;
-  }
-  .card .url{
-    font-size:14px;
-    color:var(--accent);
-    letter-spacing:.4px;
-    transition:letter-spacing .3s ease;
-  }
-  .card:hover .url{letter-spacing:1.2px}
-  footer{
-    margin-top:auto;
-    padding:28px 24px 36px;
-    color:var(--muted);
-    font-size:14px;
-    text-align:center;
-    position:relative;
-  }
-  /* Add to Home Screen: the last stop before the footer lockup.
-     Gold fill with ink text, the DNA button style for dark pages. */
-  .install{
-    padding:10px 24px 2px;
-    text-align:center;
-    position:relative;
-  }
-  .install-btn{
-    font:inherit;
-    font-size:15px;
-    letter-spacing:.6px;
-    min-height:48px;
-    padding:12px 26px;
-    border:1px solid var(--accent);
-    border-radius:999px;
-    background:var(--accent);
-    color:#14161c;
-    cursor:pointer;
-    transition:transform .3s ease, box-shadow .3s ease;
-  }
-  .install-btn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,.35)}
-  .install-help{
-    max-width:520px;
-    margin:16px auto 0;
-    padding:16px 20px;
-    background:var(--card);
-    border:1px solid var(--card-line);
-    border-radius:16px;
-    color:var(--ink);
-    font-size:15px;
-    line-height:1.55;
-    text-align:left;
-  }
-  .install-help p{margin:0}
-  [hidden]{display:none !important}
-  @media (max-width:640px){
-    main{grid-template-columns:1fr}
-    h1{font-size:34px}
-    header{padding-top:52px}
-  }
-  /* Respect visitors who ask for less motion: everything settles. */
-  @media (prefers-reduced-motion: reduce){
-    *, *::before, *::after{
-      animation-duration:.01ms !important;
-      animation-iteration-count:1 !important;
-      transition-duration:.01ms !important;
-    }
-  }
-</style>
-</head>
-<body>
-
-<header>
-  <h1>Northbrand Collective</h1>
-  <div class="rule"></div>
-  <p class="tagline">Small, useful web projects, designed and kept up with care. Pick a door:</p>
-</header>
-
-<main>
-  <!-- SITE CARDS: one block per site. Copy a block to add a site. -->
-  <a class="card" href="https://cfbsaga.northbrand.net">
-    <h2>CFB Saga</h2>
-    <p>Jeff Sagarin's college football ratings for all 266 teams, with a matchup predictor.</p>
-    <span class="url">cfbsaga.northbrand.net</span>
-  </a>
-
-  <a class="card" href="https://colorguard.northbrand.net">
-    <h2>Wylie Colorguard Digest</h2>
-    <p>Schedules, deadlines, and need-to-know updates for the Wylie Pure Gold colorguard.</p>
-    <span class="url">colorguard.northbrand.net</span>
+  <a class="card" href="https://weather.northbrand.net">
+    <h2>Northbrand Weather</h2>
+    <p>A plain, quick weather board for Abilene and the surrounding country.</p>
+    <span class="url">weather.northbrand.net</span>
   </a>
 
   <a class="card" href="https://weekend.northbrand.net">
@@ -302,16 +42,24 @@
     <span class="url">weekend.northbrand.net</span>
   </a>
 
-  <a class="card" href="https://weather.northbrand.net">
-    <h2>Northbrand Weather</h2>
-    <p>A plain, quick weather board for Abilene and the surrounding country.</p>
-    <span class="url">weather.northbrand.net</span>
+  <a class="card" href="https://colorguard.northbrand.net">
+    <h2>Wylie Colorguard Digest</h2>
+    <p>Schedules, deadlines, and need-to-know updates for the Wylie Pure Gold colorguard.</p>
+    <span class="url">colorguard.northbrand.net</span>
   </a>
+
+  <h2 class="group-label">Reference and tools</h2>
 
   <a class="card" href="https://va.northbrand.net">
     <h2>VA Health Care Quick Guide</h2>
     <p>Priority groups, copays, urgent vs. emergency care, and the contacts that matter, in one page.</p>
     <span class="url">va.northbrand.net</span>
+  </a>
+
+  <a class="card" href="https://cfbsaga.northbrand.net">
+    <h2>CFB Saga</h2>
+    <p>Jeff Sagarin's college football ratings for all 266 teams, with a matchup predictor.</p>
+    <span class="url">cfbsaga.northbrand.net</span>
   </a>
 
   <a class="card" href="https://retirement.northbrand.net">
