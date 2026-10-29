@@ -1,6 +1,6 @@
 # DESIGN.md: Northbrand Design DNA
 
-The shared design DNA for every Northbrand Collective page: the hub at northbrand.net and the sites at cfbsaga, colorguard, weekend, weather, va, retirement, and pdfcraft .northbrand.net. PDFCraft is the exception that proves the rule: a third-party app hosted stock (see the site map), so the DNA governs only its hub card, not the app itself. Any agent designing, restyling, or rebuilding one of these pages reads this file first, then the site's own DESIGN.md if it has one. This file governs what the family shares; a site's own DESIGN.md governs its local accent and content rules.
+The shared design DNA for every Northbrand Collective page: the hub at northbrand.net and the sites at cfbsaga, colorguard, weekend, weather, va, retirement, and pdfcraft .northbrand.net. PDFCraft started as the exception (a third-party app hosted stock), but on 2026-10-29 Brandon directed a theme pass: its design tokens now follow this DNA and it carries the footer lockup (see the site map), while its layout, tools, and own credits stay its own. Any agent designing, restyling, or rebuilding one of these pages reads this file first, then the site's own DESIGN.md if it has one. This file governs what the family shares; a site's own DESIGN.md governs its local accent and content rules.
 
 ## 1. Visual Theme & Atmosphere
 
@@ -99,6 +99,6 @@ Site map (project, public address, local accent, master):
 - Weather: weather.northbrand.net, Gold Bright amber, ~/workspace/cloudflare-sites/northbrandweather/ (static app, no refresh job)
 - VA Quick Guide: va.northbrand.net, Slate, ~/workspace/va-healthcare/index.html
 - Retirement Curator: retirement.northbrand.net, strategy data accents, ~/workspace/retirement-curator/index.html (single file tool; design passes touch CSS variables, header, and footer only, never the simulation script)
-- PDFCraft: pdfcraft.northbrand.net, no Northbrand styling (third-party AGPL-3.0 app by PDFCraftTool, hosted completely stock with its own name, credits, and license; do NOT reskin it or add the footer lockup), fork bparish0619-cyber/pdfcraft, local build ~/workspace/pdfcraft/ (staging ~/workspace/cloudflare-sites/pdfcraft/)
+- PDFCraft: pdfcraft.northbrand.net, Northbrand theme layer over a third-party AGPL-3.0 app (upstream PDFCraftTool): the app's design tokens follow the DNA (Gold Deep primary on light, Gold Bright on dark, Paper and Ink surfaces, serif display headings, 14 to 18px radii) and the standard footer lockup sits below the app's own footer; layout, tools, and PDFCraft's credits are untouched. A few tool-internal panels keep utility blue accents. Modified source lives in the public fork bparish0619-cyber/pdfcraft (AGPL source offer), local build ~/workspace/pdfcraft/ (staging ~/workspace/cloudflare-sites/pdfcraft/)
 
 Prompt seed: "Style this page with the Northbrand design DNA in ~/workspace/northbrand-hub/DESIGN.md: warm ink and paper neutrals, Northbrand Gold #c9a227 as the one shared accent (Gold Deep #9a7208 for gold text on light), serif display type, hairline card borders at 14 to 18px radius, the exact Northbrand footer lockup, 24-hour times, no em dashes, no new hues."
