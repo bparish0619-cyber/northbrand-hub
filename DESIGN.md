@@ -11,7 +11,7 @@ Key characteristics:
 - Northbrand Gold is the one accent shared by every page
 - Cards with hairline borders and at most a whisper of shadow
 - Low density and scannable: one clear fact at a time, short phrases over prose
-- No ads, no popups, no autoplay. Motion: the topic pages stay still beyond a subtle hover; the hub is the exception (set 2026-10-27 at Brandon's request) and may use gentle entrance, ambient, and hover motion, always with a prefers-reduced-motion fallback
+- No ads, no popups, no autoplay. Motion: the topic pages stay still beyond a subtle hover; the hub is the exception (set 2026-10-27 at Brandon's request) and may use gentle entrance, ambient, and hover motion, always with a prefers-reduced-motion fallback. Since 2026-10-29 the hub also carries a three.js gold particle field (a fixed WebGL canvas of slow drifting gold dust behind the content, pointer parallax, pinned CDN module); it is decoration only, removes itself when WebGL or the library is unavailable or reduced motion is preferred, and the page must remain complete without it
 
 ## 2. Color Palette & Roles
 
