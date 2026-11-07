@@ -1,6 +1,6 @@
 # DESIGN.md: Northbrand Design DNA
 
-The shared design DNA for every Northbrand Collective page: the hub at northbrand.net and the sites at cfbsaga, colorguard, weekend, weather, va, retirement, and pdfcraft .northbrand.net. PDFCraft started as the exception (a third-party app hosted stock), but on 2026-10-29 Brandon directed a theme pass: its design tokens now follow this DNA and it carries the footer lockup (see the site map), while its layout, tools, and own credits stay its own. Any agent designing, restyling, or rebuilding one of these pages reads this file first, then the site's own DESIGN.md if it has one. This file governs what the family shares; a site's own DESIGN.md governs its local accent and content rules.
+The shared design DNA for every Northbrand Collective page: the hub at northbrand.net and the sites at cfbsaga, colorguard, weekend, weather, va, retirement, and pdfcraft .northbrand.net. The flagship is Northbrand Aperture (northbrandaperture.net, its own domain), the photography site, folded into the hub as its hero on 2026-11-06; its interior is governed by its own DESIGN.md (~/workspace/northbrand-aperture/DESIGN.md), while the hub hero panel that presents it follows this hub DNA. PDFCraft started as the exception (a third-party app hosted stock), but on 2026-10-29 Brandon directed a theme pass: its design tokens now follow this DNA and it carries the footer lockup (see the site map), while its layout, tools, and own credits stay its own. Any agent designing, restyling, or rebuilding one of these pages reads this file first, then the site's own DESIGN.md if it has one. This file governs what the family shares; a site's own DESIGN.md governs its local accent and content rules.
 
 ## 1. Visual Theme & Atmosphere
 
@@ -60,6 +60,7 @@ If a new element needs a color, it takes a token from this file or the site's lo
 - Page padding 16px on phones, 24px on desktop. Sections separated by space and hairlines, not nested panels.
 - Order on every page: brand or title block, primary content, supporting content, footer lockup last. Nothing renders below the footer lockup except scripts.
 - The hub is the index: its cards name each site and show its northbrand.net address. When a site is added or renamed, the hub card and this file's site list change in the same pass.
+- Hub organization (set 2026-11-06, when Northbrand Aperture was folded in): a slim sticky top bar carries the wordmark, anchor links (Photography, Everyday, Reference and Tools), and a live Abilene clock in 24-hour format. Below the title block, the Aperture hero panel is the flagship moment: a full-width monochrome photograph (the Royal Street buskers frame, shown exactly as shot), the name in large serif, one poetic line, and a gold "Enter the gallery" call to action to northbrandaperture.net; the whole panel is clickable through that link. The two card groups keep their labels (Everyday boards, Reference and tools), each with a one-line description of what belongs there, and cards flow one column on phones, two on tablets, three on desktop. The Cadence school page (school.northbrand.net) is deliberately never linked from the hub.
 
 ## 6. Depth & Elevation
 
@@ -93,6 +94,7 @@ Quick reference: Ink `#14161c`, Paper `#f4f3ec`, Card `#fffdf9`, Gold `#c9a227`,
 
 Site map (project, public address, local accent, master):
 - Hub: northbrand.net, gold on ink, ~/workspace/northbrand-hub/index.html
+- Northbrand Aperture: northbrandaperture.net, the flagship photography site (monochrome first, Leica led), presented on the hub as the hero panel; its interior follows its own DESIGN.md at ~/workspace/northbrand-aperture/DESIGN.md, masters at ~/workspace/northbrand-aperture/site/
 - CFB Saga: cfbsaga.northbrand.net, Field Green data accent, ~/workspace/sagarin-site/index.html (refresh.py splices data only; shell and footer persist)
 - Colorguard Digest: colorguard.northbrand.net, Royal Purple, ~/workspace/colorguard-digest/index.html (refresh rewrites only between the DIGEST CONTENT markers; header, style, and footer persist)
 - Weekend Flyer: weekend.northbrand.net, Burnt Orange, the weekend-events-flyer artifact (exported to ~/workspace/cloudflare-sites/abileneweekend/index.html on publish)
