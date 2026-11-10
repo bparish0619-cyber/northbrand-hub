@@ -47,6 +47,14 @@
     --muted:#a7aabc;
     --accent:#c9a227;      /* Northbrand Gold */
     --gold-bright:#e8b33c; /* gold lifted for dark backgrounds */
+    /* Motion tokens (Northbrand DNA section 10, added 2026-11-10).
+       CHANGE-ME: retune motion family-wide from these six values. */
+    --ease-out-strong:cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-inout-strong:cubic-bezier(0.77, 0, 0.175, 1);
+    --ease-exit:cubic-bezier(0.4, 0, 1, 1);
+    --dur-press:140ms;
+    --dur-small:180ms;
+    --dur-menu:220ms;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -254,6 +262,36 @@
     background:linear-gradient(100deg, rgba(20,22,28,.86) 0%, rgba(20,22,28,.55) 42%, rgba(20,22,28,.05) 75%),
                linear-gradient(to top, rgba(20,22,28,.55), transparent 45%);
   }
+  /* Aperture iris (added 2026-11-10): six blades over the hero
+     photograph that open on hover, keyboard focus, or first view,
+     echoing the WebGL aperture ring behind the page. Decoration
+     only: it never receives clicks, and the reduced-motion block
+     below stills it. CHANGE-ME: blade tint and opacity live in
+     the SVG fills in the hero markup; size and placement here. */
+  .hero-iris{
+    position:absolute;
+    width:min(76%, 500px);
+    aspect-ratio:1;
+    left:66%;
+    top:44%;
+    transform:translate(-50%,-50%);
+    pointer-events:none;
+  }
+  .hero-iris svg{width:100%; height:100%; display:block; overflow:visible}
+  .hero-iris .blades{
+    transform-box:fill-box;
+    transform-origin:center;
+    transition:transform .45s var(--ease-inout-strong), opacity .45s var(--ease-inout-strong);
+  }
+  .hero:hover .hero-iris .blades,
+  .hero:focus-within .hero-iris .blades,
+  .hero.iris-open .hero-iris .blades{
+    transform:rotate(24deg) scale(1.55);
+    opacity:0;
+  }
+  @media (max-width:640px){
+    .hero-iris{left:50%; top:118px; width:64%}
+  }
   .hero-text{
     position:absolute;
     left:0;
@@ -298,7 +336,7 @@
     font-size:16px;
     letter-spacing:.5px;
     text-decoration:none;
-    transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
+    transition:transform var(--dur-menu) var(--ease-out-strong), box-shadow var(--dur-menu) ease, background var(--dur-menu) ease;
   }
   /* The stretched link: the CTA's hit area covers the whole
      panel, so a tap anywhere on the photograph enters the gallery. */
@@ -309,6 +347,7 @@
   }
   .hero-cta:hover{background:var(--gold-bright); transform:translateY(-2px); box-shadow:0 12px 28px rgba(0,0,0,.45)}
   .hero-cta:focus-visible{outline:3px solid var(--gold-bright); outline-offset:3px; background:var(--gold-bright)}
+  .hero-cta:active{transform:scale(.97)}
   .hero-url{
     display:inline-block;
     margin-left:16px;
@@ -365,7 +404,7 @@
     /* Entrance order: each card's own --d value (set inline in
        the HTML) delays its arrival, group by group. */
     animation-delay:var(--d, 0s);
-    transition:transform .18s ease-out, border-color .35s ease, filter .35s ease;
+    transition:transform var(--dur-small) var(--ease-out-strong), border-color var(--dur-menu) ease, filter var(--dur-menu) ease;
   }
   /* Warm highlight that follows the visitor's pointer across a card.
      The script sets --mx and --my; without a pointer it stays hidden. */
@@ -375,7 +414,7 @@
     inset:0;
     background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%), rgba(201,162,39,.15), transparent 65%);
     opacity:0;
-    transition:opacity .35s ease;
+    transition:opacity var(--dur-menu) ease;
   }
   .card::after{
     content:"\2192";
@@ -386,7 +425,7 @@
     font-size:20px;
     opacity:0;
     transform:translateX(-8px);
-    transition:opacity .35s ease, transform .35s ease;
+    transition:opacity var(--dur-menu) ease, transform var(--dur-menu) var(--ease-out-strong);
   }
   .card:hover{
     transform:perspective(700px) rotateX(var(--ry,0deg)) rotateY(var(--rx,0deg)) translateY(-6px) scale(1.015);
@@ -408,7 +447,7 @@
     display:inline-block;
     padding-bottom:3px;
     background:linear-gradient(var(--accent), var(--accent)) left bottom / 0% 2px no-repeat;
-    transition:background-size .4s ease;
+    transition:background-size .3s var(--ease-inout-strong);
   }
   .card:hover h3, .card:focus-visible h3{background-size:100% 2px}
   .card p{
@@ -422,7 +461,7 @@
     letter-spacing:1.5px;
     text-transform:uppercase;
     color:var(--accent);
-    transition:letter-spacing .3s ease;
+    transition:letter-spacing var(--dur-menu) ease;
   }
   .card:hover .url{letter-spacing:2.2px}
   footer{
@@ -451,9 +490,10 @@
     background:var(--accent);
     color:#14161c;
     cursor:pointer;
-    transition:transform .3s ease, box-shadow .3s ease;
+    transition:transform var(--dur-menu) var(--ease-out-strong), box-shadow var(--dur-menu) ease;
   }
   .install-btn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,.35)}
+  .install-btn:active{transform:scale(.97)}
   .install-help{
     max-width:520px;
     margin:16px auto 0;
@@ -549,6 +589,7 @@
 <section class="hero" id="photography" aria-label="Northbrand Aperture, the photography of Brandon Parish">
   <img class="hero-img" src="/aperture-hero.jpg" width="1200" height="900" alt="Street musicians on Royal Street, New Orleans: a seated bassist and a singer with a guitar outside a gallery window. Black and white photograph by Brandon Parish.">
   <div class="hero-shade" aria-hidden="true"></div>
+  <div class="hero-iris" aria-hidden="true"><svg viewBox="0 0 200 200" focusable="false"><g class="blades" fill="#14161c" fill-opacity="0.34" stroke="#e8b33c" stroke-opacity="0.35" stroke-width="1"><polygon points="100.0,66.0 129.4,83.0 229.9,25.0 100.0,-50.0"/><polygon points="129.4,83.0 129.4,117.0 229.9,175.0 229.9,25.0"/><polygon points="129.4,117.0 100.0,134.0 100.0,250.0 229.9,175.0"/><polygon points="100.0,134.0 70.6,117.0 -29.9,175.0 100.0,250.0"/><polygon points="70.6,117.0 70.6,83.0 -29.9,25.0 -29.9,175.0"/><polygon points="70.6,83.0 100.0,66.0 100.0,-50.0 -29.9,25.0"/></g></svg></div>
   <div class="hero-text">
     <p class="hero-eyebrow">Photography, the flagship</p>
     <h2>Northbrand Aperture</h2>
@@ -930,6 +971,26 @@
       renderer.render(scene, camera);
     });
   }
+</script>
+
+<script>
+  // Aperture iris first-view moment (added 2026-11-10): the blades
+  // open once when the hero first scrolls into view, so touch
+  // visitors see the gesture without a hover. Skipped entirely
+  // when the visitor prefers reduced motion.
+  (function(){
+    var hero = document.querySelector('.hero');
+    if (!hero || !('IntersectionObserver' in window)) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var io = new IntersectionObserver(function(entries){
+      if (entries[0].isIntersecting) {
+        hero.classList.add('iris-open');
+        setTimeout(function(){ hero.classList.remove('iris-open'); }, 1100);
+        io.disconnect();
+      }
+    }, {threshold: 0.35});
+    io.observe(hero);
+  })();
 </script>
 
 </body>
