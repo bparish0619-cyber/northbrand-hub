@@ -8,20 +8,25 @@ The front door of the **Northbrand Collective**: a single-page index of small, u
 
 | Site | Address | What it is |
 | --- | --- | --- |
+| Northbrand Aperture | [northbrandaperture.net](https://northbrandaperture.net) | The flagship photography site, presented as the hub's hero panel |
 | CFB Saga | [cfbsaga.northbrand.net](https://cfbsaga.northbrand.net) | Jeff Sagarin's college football ratings for all 266 teams, with a matchup predictor |
 | Wylie Colorguard Digest | [colorguard.northbrand.net](https://colorguard.northbrand.net) | Schedules, deadlines, and need-to-know updates for the Wylie Pure Gold colorguard |
 | Abilene Weekend | [weekend.northbrand.net](https://weekend.northbrand.net) | The week's events, shows, and pop-ups around Abilene, refreshed every Wednesday |
 | Northbrand Weather | [weather.northbrand.net](https://weather.northbrand.net) | A plain, quick weather board for Abilene and the surrounding country |
 | VA Health Care Quick Guide | [va.northbrand.net](https://va.northbrand.net) | Priority groups, copays, urgent vs. emergency care, and key contacts for 2026 |
 | Retirement Curator | [retirement.northbrand.net](https://retirement.northbrand.net) | Retirement outcome simulations based on VOO and VTI, with 2026 tax-aware analysis |
+| PDFCraft | [pdfcraft.northbrand.net](https://pdfcraft.northbrand.net) | A browser PDF toolkit: a Northbrand theme layer over an open-source app |
+| School Dashboard | [school.northbrand.net](https://school.northbrand.net) | A private school dashboard behind a sign-in (Cloudflare Access), in the hub's Behind the login group |
 
-Each site has its own repository; this repo holds only the hub page itself.
+Most sites have their own repository; this repo holds only the hub page itself. Two exceptions: Northbrand Aperture and the school dashboard have no repository, and their masters live only in the local workspace.
 
 ## Design
 
 The hub follows the **Northbrand design DNA** (see `DESIGN.md` in this repo, which governs every northbrand.net page): warm ink `#14161c`, Northbrand Gold `#c9a227`, serif display type, hairline card borders, and a calm, printed feel.
 
-The hub is the one page allowed gentle motion: the cards rise and settle in one after another with a breathing gold glow and a slow sheen sweep, a gold rule shimmers under the title, cards lift and tilt on hover with a warm highlight that follows the pointer, and the background glow breathes slowly. All of it settles for visitors who prefer reduced motion. The topic pages stay still.
+The page opens with a slim sticky top bar: the wordmark, anchor links (Photography, Everyday, Reference and Tools, Private), and a live Abilene clock in 24-hour format. Under the title block sits the Aperture hero panel, a full-width monochrome photograph with a gold "Enter the gallery" call to action. The cards below fall into three groups: Everyday boards, Reference and tools, and Behind the login, which holds pages that sit behind a sign-in (the school dashboard is its first card).
+
+The hub is the one page allowed gentle motion. A three.js field of slow gold dust drifts behind the content, with a faint aperture ring turning behind the hero; the cards rise and settle in one after another; a gold rule shimmers under the title; cards lift and tilt on hover with a warm highlight that follows the pointer; and six aperture blades over the hero photograph open on hover, on keyboard focus, or once when the hero first scrolls into view. Motion values are the shared tokens in section 10 of `DESIGN.md`. All of it settles for visitors who prefer reduced motion, and the page is complete without the WebGL layer. The topic pages stay still.
 
 ## Favicon and home screen
 
@@ -36,7 +41,7 @@ The page itself lives in the single file `index.html`. There is no build step.
 - **Add or change a site:** copy a card block in the `<main>` section (each card is one `<a class="card">` block) and edit its link, title, one-line description, and address.
 - **Change colors:** edit the variables in `:root` at the top of the `<style>` block.
 - **Change the wording:** the tagline and footer are plain HTML in the `<header>` and `<footer>` sections.
-- **The motion:** a small script at the bottom of the page drives the card highlight and tilt; everything else is CSS in the `<style>` block.
+- **The motion:** scripts at the bottom of the page drive the card highlight and tilt, the gold particle field, and the hero iris; everything else is CSS in the `<style>` block.
 
 ## Deployment
 
@@ -59,6 +64,7 @@ This repository is the backup and archive of record for the hub page, the same p
 ## Files
 
 - `index.html`: the hub page
+- `aperture-hero.jpg`: the Royal Street buskers photograph in the hero panel
 - `DESIGN.md`: the Northbrand design DNA, shared by all northbrand.net pages
 - `README.md`: this file
 - `favicon.svg`, `favicon-32.png`, `favicon.ico`, `apple-touch-icon.png`, `icon-512.png`: the favicon set (gold serif N on ink)
