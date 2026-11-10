@@ -11,7 +11,7 @@ Key characteristics:
 - Northbrand Gold is the one accent shared by every page
 - Cards with hairline borders and at most a whisper of shadow
 - Low density and scannable: one clear fact at a time, short phrases over prose
-- No ads, no popups, no autoplay. Motion: the topic pages stay still beyond a subtle hover; the hub is the exception (set 2026-10-27 at Brandon's request) and may use gentle entrance, ambient, and hover motion, always with a prefers-reduced-motion fallback. Since 2026-10-29 the hub also carries a three.js gold particle field (a fixed WebGL canvas of slow drifting gold dust behind the content, pointer parallax, pinned CDN module); it is decoration only, removes itself when WebGL or the library is unavailable or reduced motion is preferred, and the page must remain complete without it
+- No ads, no popups, no autoplay. Motion: the topic pages stay still beyond a subtle hover; the hub is the exception (set 2026-10-27 at Brandon's request) and may use gentle entrance, ambient, and hover motion, always with a prefers-reduced-motion fallback. Motion values and interaction rules are tokenized in section 10 (added 2026-11-10). Since 2026-10-29 the hub also carries a three.js gold particle field (a fixed WebGL canvas of slow drifting gold dust behind the content, pointer parallax, pinned CDN module); it is decoration only, removes itself when WebGL or the library is unavailable or reduced motion is preferred, and the page must remain complete without it
 
 ## 2. Color Palette & Roles
 
@@ -60,7 +60,7 @@ If a new element needs a color, it takes a token from this file or the site's lo
 - Page padding 16px on phones, 24px on desktop. Sections separated by space and hairlines, not nested panels.
 - Order on every page: brand or title block, primary content, supporting content, footer lockup last. Nothing renders below the footer lockup except scripts.
 - The hub is the index: its cards name each site and show its northbrand.net address. When a site is added or renamed, the hub card and this file's site list change in the same pass.
-- Hub organization (set 2026-11-06, when Northbrand Aperture was folded in): a slim sticky top bar carries the wordmark, anchor links (Photography, Everyday, Reference and Tools), and a live Abilene clock in 24-hour format. Below the title block, the Aperture hero panel is the flagship moment: a full-width monochrome photograph (the Royal Street buskers frame, shown exactly as shot), the name in large serif, one poetic line, and a gold "Enter the gallery" call to action to northbrandaperture.net; the whole panel is clickable through that link. The two card groups keep their labels (Everyday boards, Reference and tools), each with a one-line description of what belongs there, and cards flow one column on phones, two on tablets, three on desktop. The Cadence school page (school.northbrand.net) is deliberately never linked from the hub.
+- Hub organization (set 2026-11-06, when Northbrand Aperture was folded in): a slim sticky top bar carries the wordmark, anchor links (Photography, Everyday, Reference and Tools, Private), and a live Abilene clock in 24-hour format. Below the title block, the Aperture hero panel is the flagship moment: a full-width monochrome photograph (the Royal Street buskers frame, shown exactly as shot), the name in large serif, one poetic line, and a gold "Enter the gallery" call to action to northbrandaperture.net; the whole panel is clickable through that link. The card groups keep their labels (Everyday boards, Reference and tools, and Behind the login, added 2026-11-09), each with a one-line description of what belongs there, and cards flow one column on phones, two on tablets, three on desktop. The Behind the login group holds pages that sit behind a sign-in: the school page (school.northbrand.net, Cloudflare Access) was its first card on 2026-11-09 at Brandon's direction, superseding the earlier never-link rule. The Access wall, not the hub link, is what guards those pages, and their hub cards carry no family names, like every public surface.
 
 ## 6. Depth & Elevation
 
@@ -81,6 +81,8 @@ Don't:
 - No em dashes, no hype language, no exclamation marks in page copy
 - Public family pages (Colorguard, Weekend) never carry family names or calendar content, whatever the design pass
 - Never let a refresh job's content region swallow the footer lockup; it lives outside every content marker and template region
+- No descriptive paragraph in or above the footer (removed 2026-11-06 at Brandon's direction; the October 2026 crawler and recategorization paragraphs are retired). The footer carries the lockup and at most a short site credit line; what a page is about lives only in its meta description tag, never as visible footer prose
+- Never print Brandon's middle initial on any page (set 2026-11-06 at his direction). He is "Brandon Parish" everywhere: body copy, headings, captions, alt text, aria labels, and meta descriptions alike
 
 ## 8. Responsive Behavior
 
@@ -94,6 +96,7 @@ Quick reference: Ink `#14161c`, Paper `#f4f3ec`, Card `#fffdf9`, Gold `#c9a227`,
 
 Site map (project, public address, local accent, master):
 - Hub: northbrand.net, gold on ink, ~/workspace/northbrand-hub/index.html
+- School Dashboard: school.northbrand.net, private behind Cloudflare Access (sign-in required), linked only from the hub's Behind the login group since 2026-11-09, masters in ~/workspace/cadence-school/
 - Northbrand Aperture: northbrandaperture.net, the flagship photography site (monochrome first, Leica led), presented on the hub as the hero panel; its interior follows its own DESIGN.md at ~/workspace/northbrand-aperture/DESIGN.md, masters at ~/workspace/northbrand-aperture/site/
 - CFB Saga: cfbsaga.northbrand.net, Field Green data accent, ~/workspace/sagarin-site/index.html (refresh.py splices data only; shell and footer persist)
 - Colorguard Digest: colorguard.northbrand.net, Royal Purple, ~/workspace/colorguard-digest/index.html (refresh rewrites only between the DIGEST CONTENT markers; header, style, and footer persist)
@@ -103,4 +106,27 @@ Site map (project, public address, local accent, master):
 - Retirement Curator: retirement.northbrand.net, strategy data accents, ~/workspace/retirement-curator/index.html (single file tool; design passes touch CSS variables, header, and footer only, never the simulation script)
 - PDFCraft: pdfcraft.northbrand.net, Northbrand theme layer over a third-party AGPL-3.0 app (upstream PDFCraftTool): the app's design tokens follow the DNA (Gold Deep primary on light, Gold Bright on dark, Paper and Ink surfaces, serif display headings, 14 to 18px radii) and the standard footer lockup sits below the app's own footer; layout, tools, and PDFCraft's credits are untouched. A few tool-internal panels keep utility blue accents. Modified source lives in the public fork bparish0619-cyber/pdfcraft (AGPL source offer), local build ~/workspace/pdfcraft/ (staging ~/workspace/cloudflare-sites/pdfcraft/)
 
-Prompt seed: "Style this page with the Northbrand design DNA in ~/workspace/northbrand-hub/DESIGN.md: warm ink and paper neutrals, Northbrand Gold #c9a227 as the one shared accent (Gold Deep #9a7208 for gold text on light), serif display type, hairline card borders at 14 to 18px radius, the exact Northbrand footer lockup, 24-hour times, no em dashes, no new hues."
+Prompt seed: "Style this page with the Northbrand design DNA in ~/workspace/northbrand-hub/DESIGN.md: warm ink and paper neutrals, Northbrand Gold #c9a227 as the one shared accent (Gold Deep #9a7208 for gold text on light), serif display type, hairline card borders at 14 to 18px radius, the exact Northbrand footer lockup, 24-hour times, no em dashes, no new hues, motion per the section 10 tokens (ease-out strong entries, under 300ms, reduced motion honored)."
+
+## 10. Motion Tokens & Rules (added 2026-11-10 at Brandon's direction)
+
+Shared motion tokens (every page that animates carries these values, under whatever local variable names it already uses):
+- **Ease Out Strong** (`cubic-bezier(0.23, 1, 0.32, 1)`): entries, menus, reveals. The default UI easing family-wide.
+- **Ease In Out Strong** (`cubic-bezier(0.77, 0, 0.175, 1)`): elements moving or morphing on screen.
+- **Ease Exit** (`cubic-bezier(0.4, 0, 1, 1)`): elements leaving the screen.
+- **Duration Press** (100 to 160ms): button and control press feedback.
+- **Duration Small** (125 to 200ms): tooltips, small popovers.
+- **Duration Menu** (150 to 250ms): dropdowns, panels, expanding sections.
+- **Duration Large** (200 to 500ms): drawers and modals only, where the travel distance justifies it.
+- **Press Scale** (0.97): the :active scale on pressable controls, near-instant in, about 100ms release.
+- **Stagger** (30 to 80ms per item): grouped entrances step by this much, never all at once.
+
+Rules:
+- Animate transform and opacity only. Never animate layout properties (width, height, top, left). Never write `transition: all`; name the exact properties.
+- Entering elements use Ease Out Strong, exiting elements use Ease Exit, and nothing enters on an ease-in curve. Popovers and menus animate from their trigger, with transform-origin at the source point.
+- The ceiling is 300ms for UI animation; only Duration Large travel may exceed it. When in doubt, go faster: perceived speed is perceived quality.
+- Never animate keyboard-initiated actions, and never animate anything a user triggers hundreds of times a day.
+- Hover states change color, opacity, or shadow only. No scale or movement on cards at hover; layout never shifts under the pointer.
+- Every animation answers a purpose: feedback, state indication, spatial consistency, explanation, or preventing a jarring jump. Motion without a purpose is cut.
+- Section 1 still governs which pages may move at all (topic pages still, hub the exception). This section governs HOW anything that moves, moves.
+- `prefers-reduced-motion` disables or minimizes all motion on every surface, including the hub WebGL scene. No surface ships motion without the fallback.
