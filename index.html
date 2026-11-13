@@ -439,6 +439,25 @@
   .card:hover::before, .card:focus-visible::before{opacity:1}
   .card:hover::after, .card:focus-visible::after{opacity:1; transform:translateX(0)}
   .card:focus-visible{outline:3px solid var(--accent); outline-offset:3px}
+
+  /* Scroll reveal (added 2026-11-13):
+     cards start hidden ONLY while the reveal script at the bottom
+     is running (it adds .js to <html> itself, so no script means no
+     hidden cards, ever). The script swaps .reveal/.in for .noenter
+     when a card's entrance finishes, which keeps the cardIn load
+     animation from replaying and returns hover and tilt behavior
+     to exactly the rules above. Motion follows the DNA section 10
+     tokens: Ease Out Strong, 300ms, transform and opacity only. */
+  html.js .card.reveal{
+    animation:cardGlow 7s ease-in-out infinite alternate, sheenSlide 9s ease-in-out infinite;
+    opacity:0;
+    transform:translateY(16px);
+    transition:opacity .3s var(--ease-out-strong), transform .3s var(--ease-out-strong), border-color var(--dur-menu) ease, filter var(--dur-menu) ease;
+  }
+  html.js .card.reveal.in{opacity:1; transform:translateY(0)}
+  .card.noenter{
+    animation:cardGlow 7s ease-in-out infinite alternate, sheenSlide 9s ease-in-out infinite;
+  }
   .card > *{position:relative; z-index:1}
   .card h3{
     font-size:22px;
@@ -996,6 +1015,57 @@
       }
     }, {threshold: 0.35});
     io.observe(hero);
+  })();
+</script>
+
+<script>
+  // Scroll reveal (added 2026-11-13).
+  // WHY: every card on the hub runs its entrance animation on page
+  // load, so the Reference and Private groups animate unseen, long
+  // before a visitor scrolls to them. This script holds each card
+  // until it actually enters the viewport, then rises it in with a
+  // short stagger across its row. Above-fold cards reveal at once,
+  // so the first screen feels the same as today.
+  // SAFETY: if anything here is unavailable (no IntersectionObserver,
+  // reduced motion preferred, script blocked), the script does
+  // nothing at all and the page behaves exactly as the live hub.
+  // TO RETUNE: STAGGER_MS is the step between cards in a row, and
+  // the .3s durations in the CSS block above are the rise speed.
+  (function () {
+    var STAGGER_MS = 60;      // delay step between cards, per DNA stagger token (30 to 80ms)
+    var STAGGER_CAP = 4;      // never hold a card longer than 4 steps
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!('IntersectionObserver' in window)) return;
+    var cards = document.querySelectorAll('.card');
+    if (!cards.length) return;
+    document.documentElement.classList.add('js');
+    cards.forEach(function (card) { card.classList.add('reveal'); });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var card = entry.target;
+        io.unobserve(card);
+        // Stagger by the card's position inside its own grid row group.
+        var siblings = Array.prototype.slice.call(card.parentElement.children);
+        var idx = siblings.indexOf(card);
+        card.style.transitionDelay = (Math.min(idx, STAGGER_CAP) * STAGGER_MS) + 'ms';
+        card.classList.add('in');
+        var settled = false;
+        var done = function () {
+          if (settled) return;
+          settled = true;
+          // Swap to .noenter: keeps the entrance animation from
+          // replaying while restoring the card's normal rules.
+          card.classList.remove('reveal', 'in');
+          card.classList.add('noenter');
+          card.style.transitionDelay = '';
+          card.removeEventListener('transitionend', done);
+        };
+        card.addEventListener('transitionend', done);
+        setTimeout(done, 800); // safety net: a card never stays in reveal state
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    cards.forEach(function (card) { io.observe(card); });
   })();
 </script>
 
