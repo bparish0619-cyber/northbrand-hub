@@ -110,6 +110,10 @@ Prompt seed: "Style this page with the Northbrand design DNA in ~/workspace/nort
 
 ## 10. Motion Tokens & Rules (added 2026-11-10 at Brandon's direction)
 
+Signature moment (added 2026-11-10): the Aperture hero carries a six-blade SVG aperture iris over the photograph (ink fill, gold stroke), which opens on hover, on focus-within, and once on first view; reduced motion skips the first-view opening. It is the hub's one subject-derived effect; keep it, and do not add a second competing effect.
+
+Hub scroll reveals (added 2026-11-13): the hub's cards hold below the fold and rise as they enter the viewport (IntersectionObserver, Ease Out Strong, 300ms, 60ms stagger across a row), instead of every card's entrance running on page load whether anyone is looking or not. The reveal is gated by a class the script adds to the page itself, so a no-script visit and a reduced-motion visit both get the settled page exactly as before, and each card returns to its normal rules the moment its entrance finishes.
+
 Shared motion tokens (every page that animates carries these values, under whatever local variable names it already uses):
 - **Ease Out Strong** (`cubic-bezier(0.23, 1, 0.32, 1)`): entries, menus, reveals. The default UI easing family-wide.
 - **Ease In Out Strong** (`cubic-bezier(0.77, 0, 0.175, 1)`): elements moving or morphing on screen.
