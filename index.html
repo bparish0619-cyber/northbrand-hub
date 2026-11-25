@@ -373,16 +373,7 @@
     from{background-position:120% 0}
     to{background-position:-80% 0}
   }
-  .mast-tag{
-    margin:14px auto 0;
-    max-width:560px;
-    font-size:clamp(16px, 2vw, 19px);
-    line-height:1.5;
-    color:#ece9e2;
-  }
-  html.js .mast-place, html.js .mast-tag{animation:rise .8s var(--ease-out-strong) backwards}
-  html.js .mast-place{animation-delay:.3s}
-  html.js .mast-tag{animation-delay:.55s}
+  html.js .mast-place{animation:rise .8s var(--ease-out-strong) .3s backwards}
   /* The Aperture words at the foot of the cover. */
   .hero-text{
     position:absolute;
@@ -606,16 +597,7 @@
     color:var(--accent);
     white-space:nowrap;
   }
-  .entry-tag{
-    font-size:11px;
-    letter-spacing:2px;
-    text-transform:uppercase;
-    color:var(--muted);
-    border:1px solid var(--card-line);
-    border-radius:999px;
-    padding:4px 10px;
-    white-space:nowrap;
-  }
+
   /* Scroll reveal for the index (Aperture Index): rows and plate
      headers hold only while the reveal script runs (html.js is set
      in the head; the script adds .rv itself), then rise in with a
@@ -784,7 +766,7 @@
     <p class="mast-place">Abilene, Texas</p>
     <h1 class="mast-title"><span class="line-mask"><span class="line-in">Northbrand Aperture</span></span></h1>
     <div class="mast-rule"></div>
-    <p class="mast-tag">Small sites, built and kept by hand. Start anywhere.</p>
+
   </div>
   <div class="hero-text">
     <p class="hero-eyebrow">Photography, the flagship</p>
@@ -821,7 +803,6 @@
       </span>
       <span class="entry-meta">
         <span class="entry-url">weather.northbrand.net</span>
-        <span class="entry-tag">Updated every morning</span>
       </span>
     </a>
 
@@ -833,7 +814,6 @@
       </span>
       <span class="entry-meta">
         <span class="entry-url">weekend.northbrand.net</span>
-        <span class="entry-tag">Refreshed Mon &middot; Wed &middot; Fri</span>
       </span>
     </a>
 
@@ -876,7 +856,6 @@
       </span>
       <span class="entry-meta">
         <span class="entry-url">cfbsaga.northbrand.net</span>
-        <span class="entry-tag">Refreshed Sundays</span>
       </span>
     </a>
 
@@ -939,7 +918,7 @@
   </section>
 </main>
 
-<p class="colophon">Set in Georgia. Abilene, Texas.</p>
+<p class="colophon">Abilene, Texas.</p>
 
 <!-- Add to Home Screen: Android and Chrome get the browser's own install
      prompt from the script below. iOS offers no prompt, so the button opens
