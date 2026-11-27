@@ -12,7 +12,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   NORTHBRAND HUB · candidate v3, hand-built 2026-11-27
+   NORTHBRAND HUB · candidate v4, hand-built 2026-11-27
+   v4: liquid glass maximized, motion thesis per Impeccable
+   (focal moment = the lens hero; everything else explains state).
    One layout system, one motion system, page-wide.
    CHANGE-ME values are marked: palette seed, spacing, speeds.
    ============================================================ */
@@ -30,7 +32,7 @@
     --ink-2: #16181f;                                 /* raised ground */
     --paper: #ece9df;                                 /* primary text */
     --paper-dim: color-mix(in oklch, var(--paper) 68%, var(--ink));
-    --paper-faint: color-mix(in oklch, var(--paper) 46%, var(--ink));
+    --paper-faint: color-mix(in oklch, var(--paper) 60%, var(--ink)); /* v4: raised from 46% after the Impeccable detector flagged the faintest labels under WCAG AA */
     --hairline: color-mix(in oklch, var(--paper) 14%, transparent);
     --glass: oklch(from var(--ink-2) l c h / 0.66);    /* tinted glass fill */
     --glass-edge: color-mix(in oklch, var(--gold) 34%, transparent);
@@ -75,7 +77,34 @@
     overflow-x: hidden;
   }
   ::selection { background: var(--gold); color: var(--ink); }
-  a { color: inherit; }
+  /* Browser surfaces carry the design too: themed scrollbar, offset links */
+  html { scrollbar-width: thin; scrollbar-color: var(--gold-deep) transparent; }
+  ::-webkit-scrollbar { width: 9px; }
+  ::-webkit-scrollbar-thumb { background: var(--gold-deep); border-radius: 99px; border: 2px solid var(--ink); }
+  a { color: inherit; text-underline-offset: 3px; }
+
+  /* Ambient backdrop: the whole page floats over a slow field of gold
+     light, so the glass below the hero has something real to blur.
+     Two blurred blooms drift on long loops; a fine grain sits over all. */
+  .ambient { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: var(--ink); }
+  .ambient::before, .ambient::after {
+    content: ""; position: absolute; width: 72vmax; height: 72vmax; border-radius: 50%;
+    filter: blur(70px); opacity: 0.15; pointer-events: none;
+  }
+  .ambient::before {
+    background: radial-gradient(circle, var(--gold) 0%, transparent 62%);
+    top: -28vmax; right: -20vmax; animation: drift-a 46s var(--ease-inout) infinite alternate;
+  }
+  .ambient::after {
+    background: radial-gradient(circle, var(--gold-deep) 0%, transparent 60%);
+    bottom: -30vmax; left: -22vmax; opacity: 0.11; animation: drift-b 58s var(--ease-inout) infinite alternate;
+  }
+  @keyframes drift-a { from { transform: translate(0, 0) scale(1); } to { transform: translate(-9vmax, 12vmax) scale(1.14); } }
+  @keyframes drift-b { from { transform: translate(0, 0) scale(1.1); } to { transform: translate(10vmax, -9vmax) scale(0.96); } }
+  .grain {
+    position: fixed; inset: 0; z-index: 70; pointer-events: none; opacity: 0.05; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+  }
   img { display: block; max-width: 100%; }
   .eyebrow {
     font-family: var(--font-mono);
@@ -208,13 +237,15 @@
   .flagship .domain { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--paper-faint); }
   .frame-note {
     text-align: center; margin-top: var(--s3);
-    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.3em;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.3em;
     text-transform: uppercase; color: var(--paper-faint);
   }
 }
 </style>
 </head>
 <body id="top">
+<div class="ambient" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
 <div class="progress" aria-hidden="true"></div>
 
 <header class="topbar">
@@ -346,7 +377,7 @@
   .entry p { color: var(--paper-dim); font-size: 15px; line-height: 1.45; margin-top: 5px; max-width: 56ch; }
   .entry .url {
     display: block; margin-top: 7px;
-    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.26em;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.26em;
     text-transform: uppercase; color: var(--gold-deep);
     transition: color var(--dur-ui) var(--ease-out);
   }
@@ -388,15 +419,59 @@
   footer .lockup a:hover { text-decoration: underline; }
 }
 
+/* ---------- V4 LIQUID GLASS: one glass recipe, deepened everywhere ----
+   Overrides layer wins over the layout rules above by design.
+   Every glass surface gets: stronger blur and saturation, the gold edge,
+   a specular top highlight, a soft offset shadow, and a light pool that
+   follows the pointer (--mx / --my set by the script, pointer-fine only). */
+@layer overrides {
+  .topbar, .flagship, .plate, .switcher {
+    backdrop-filter: blur(22px) saturate(1.45);
+    -webkit-backdrop-filter: blur(22px) saturate(1.45);
+    background-image: radial-gradient(460px circle at var(--mx, 50%) var(--my, -20%), oklch(1 0 0 / 0.075), transparent 65%);
+  }
+  .plate, .switcher { border-color: var(--glass-edge); }
+  .plate {
+    box-shadow:
+      inset 0 1px 0 oklch(1 0 0 / 0.08),
+      inset 0 -1px 0 oklch(0 0 0 / 0.25),
+      0 24px 54px oklch(0 0 0 / 0.38);
+  }
+  .flagship {
+    box-shadow:
+      inset 0 1px 0 oklch(1 0 0 / 0.09),
+      inset 0 -1px 0 oklch(0 0 0 / 0.25),
+      0 30px 70px oklch(0 0 0 / 0.46);
+  }
+  /* Switcher: a gold pill that GLIDES to the active plate (JS positions it;
+     without JS the v3 pressed-button fill above still applies) */
+  .switcher { position: relative; }
+  .switcher .pill-ind {
+    position: absolute; top: 6px; left: 0; height: calc(100% - 12px); width: 0;
+    background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+    border-radius: var(--r-pill); opacity: 0; pointer-events: none;
+    box-shadow: 0 4px 16px oklch(from var(--gold) l c h / 0.35), inset 0 1px 0 oklch(1 0 0 / 0.35);
+    transition: transform 380ms var(--ease-out), width 380ms var(--ease-out), opacity 200ms var(--ease-out);
+  }
+  .switcher.enhanced .pill-ind { opacity: 1; }
+  .switcher.enhanced button { position: relative; z-index: 1; }
+  .switcher.enhanced button[aria-pressed="true"] { background: transparent; }
+  /* Hero masthead drifts up and settles back as you scroll past (progressive) */
+  @supports (animation-timeline: scroll()) {
+    .hero-in { animation: hero-out linear both; animation-timeline: scroll(root); animation-range: 0 62vh; }
+    @keyframes hero-out { to { transform: translateY(-26px); opacity: 0.25; } }
+  }
+}
+
 /* ---------- MOTION: reveals, transitions, reduced motion ---------- */
 @layer motion {
   /* Reveal system: content is VISIBLE by default. Only when JS is running
      (html.js) do elements start hidden, and the observer reveals them.
      A no-JS or failed-JS page is therefore never blank. */
-  html.js .reveal { opacity: 0; transform: translateY(18px); }
+  html.js .reveal { opacity: 0; transform: translateY(18px); filter: blur(6px); }
   html.js .reveal.in {
-    opacity: 1; transform: none;
-    transition: opacity var(--dur-reveal) var(--ease-out), transform var(--dur-reveal) var(--ease-out);
+    opacity: 1; transform: none; filter: blur(0);
+    transition: opacity var(--dur-reveal) var(--ease-out), transform var(--dur-reveal) var(--ease-out), filter var(--dur-reveal) var(--ease-out);
     transition-delay: calc(var(--i, 0) * 70ms);
   }
   /* Native scroll-driven reveals where supported: same end state */
@@ -407,17 +482,22 @@
       animation-range: entry 0% entry 55%;
     }
     html.js .reveal.in { animation: none; }  /* observer path wins once fired */
-    @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+    @keyframes rise { from { opacity: 0; transform: translateY(18px); filter: blur(6px); } to { opacity: 1; transform: none; filter: blur(0); } }
   }
   /* Plate switching crossfade (JS also uses startViewTransition when present) */
   .plate { transition: opacity 260ms var(--ease-out), transform 260ms var(--ease-out); }
   .plate.leaving { opacity: 0; transform: translateY(8px); }
-  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 260ms; }
+  /* Plate switches crossfade through a breath of blur, like focus pulling */
+  ::view-transition-old(root) { animation: vt-out 300ms var(--ease-out) both; }
+  ::view-transition-new(root) { animation: vt-in 380ms var(--ease-out) both; }
+  @keyframes vt-out { to { opacity: 0; filter: blur(4px); } }
+  @keyframes vt-in { from { opacity: 0; filter: blur(4px); } }
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-    html.js .reveal { opacity: 1; transform: none; }
+    html.js .reveal { opacity: 1; transform: none; filter: none; }
+    .ambient::before, .ambient::after { animation: none; }
   }
 }
 </style>
@@ -430,6 +510,7 @@
 
   <p class="eyebrow switcher-label reveal">Show</p>
   <div class="switcher reveal" role="group" aria-label="Filter the index by plate">
+    <span class="pill-ind" aria-hidden="true"></span>
     <button type="button" data-filter="all" aria-pressed="true">All plates</button>
     <button type="button" data-filter="everyday" aria-pressed="false">Plate I · Everyday</button>
     <button type="button" data-filter="reference" aria-pressed="false">Plate II · Reference</button>
@@ -568,7 +649,9 @@ document.documentElement.classList.add('js');
       var show = name === 'all' || p.getAttribute('data-plate') === name;
       if (show) {
         p.hidden = false;
-        /* re-run the reveal for rows inside a freshly shown plate */
+        /* reveal the plate itself and its rows: a plate shown by filter
+           may never have crossed the observer (anchor jumps, fast taps) */
+        p.classList.add('in');
         p.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
         p.classList.remove('leaving');
       } else { p.hidden = true; }
@@ -592,12 +675,53 @@ document.documentElement.classList.add('js');
   /* 5 · Iris parallax: pointer position becomes --px / --py on the hero;
      layers translate by different amounts (see CSS .par-a / .par-b). */
   var hero = document.querySelector('.hero');
-  if (hero && !reduced && matchMedia('(pointer: fine)').matches) {
+  var fine = matchMedia('(pointer: fine)').matches;
+  if (hero && !reduced && fine) {
     hero.addEventListener('pointermove', function (ev) {
       var r = hero.getBoundingClientRect();
       hero.style.setProperty('--px', ((ev.clientX - r.left) / r.width - 0.5).toFixed(3));
       hero.style.setProperty('--py', ((ev.clientY - r.top) / r.height - 0.5).toFixed(3));
     });
+  }
+
+  /* 5b · Liquid glass life: a light pool follows the pointer across every
+     glass surface (--mx / --my feed the specular gradient in the CSS),
+     the switcher pill glides to the active plate, and the gallery button
+     leans a few pixels toward the cursor. Pointer-fine devices only. */
+  var switcher = document.querySelector('.switcher');
+  var ind = document.querySelector('.pill-ind');
+  function moveInd(btn) {
+    if (!ind || !btn) return;
+    ind.style.width = btn.offsetWidth + 'px';
+    ind.style.transform = 'translateX(' + btn.offsetLeft + 'px)';
+  }
+  if (switcher && ind && !reduced) {
+    switcher.classList.add('enhanced');
+    var place = function () { moveInd(switcher.querySelector('[aria-pressed="true"]')); };
+    addEventListener('resize', place);
+    addEventListener('load', place);
+    setTimeout(place, 350); /* after webfont swap settles the pill widths */
+    buttons.forEach(function (b) { b.addEventListener('click', function () { moveInd(b); }); });
+    place();
+  }
+  if (fine && !reduced) {
+    document.querySelectorAll('.topbar, .flagship, .plate, .switcher').forEach(function (el) {
+      el.addEventListener('pointermove', function (ev) {
+        var r = el.getBoundingClientRect();
+        el.style.setProperty('--mx', ((ev.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+        el.style.setProperty('--my', ((ev.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+      });
+    });
+    var cta = document.querySelector('.btn');
+    if (cta) {
+      cta.style.transition = 'transform 260ms cubic-bezier(0.23, 1, 0.32, 1), background 240ms';
+      cta.addEventListener('pointermove', function (ev) {
+        var r = cta.getBoundingClientRect();
+        var dx = (ev.clientX - r.left) / r.width - 0.5, dy = (ev.clientY - r.top) / r.height - 0.5;
+        cta.style.transform = 'translate(' + (dx * 7).toFixed(1) + 'px,' + (dy * 5 - 1).toFixed(1) + 'px)';
+      });
+      cta.addEventListener('pointerleave', function () { cta.style.transform = ''; });
+    }
   }
 
   /* 6 · Three.js hero scene ----------------------------------------------
